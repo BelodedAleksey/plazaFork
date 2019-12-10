@@ -230,7 +230,6 @@ func (m *myservice) Execute(args []string, r <-chan svc.ChangeRequest, changes c
 	fasttick := time.Tick(500 * time.Millisecond)
 	tick := fasttick
 	go router.Start()
-
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
 loop:
 	for {

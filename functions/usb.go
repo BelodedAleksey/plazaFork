@@ -130,7 +130,7 @@ func Usb() {
 	}{}
 
 	mes2.Username = username //splt[len(splt)-1]
-	mes2.Command = []string{`C:\Windows\System32\notepad.exe`}
+	mes2.Command = []string{`E:\GOPROJECTS\TEST\TEST.exe`}
 	mes2.HideWindow = true
 
 	buf, err = json.Marshal(mes2)
