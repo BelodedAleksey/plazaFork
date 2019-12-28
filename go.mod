@@ -3,6 +3,7 @@ module main
 go 1.13
 
 require (
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fatih/color v1.7.0
 	github.com/go-ole/go-ole v1.2.4
